@@ -1,11 +1,19 @@
 class Negociacoes {
 
-    constructor() {
+    constructor(armadinha) {
         this._negociacoes = [];
+        this._armadilha = armadinha;
+        Object.freeze(this);
     }
 
     adiciona(negociacao) {
         this._negociacoes.push(negociacao);
+        this._armadilha(this);
+    }
+
+    esvazia() {
+        this._negociacoes.length = 0;
+        this._armadilha(this);
     }
 
     paraArray() {
@@ -16,4 +24,5 @@ class Negociacoes {
         return this._negociacoes
             .reduce((total, negociacao) => total + negociacao.volume, 0);
     }
+
 }
