@@ -1,19 +1,16 @@
 class Negociacoes {
 
-    constructor(armadinha) {
+    constructor() {
         this._negociacoes = [];
-        this._armadilha = armadinha;
         Object.freeze(this);
     }
 
     adiciona(negociacao) {
         this._negociacoes.push(negociacao);
-        this._armadilha(this);
     }
 
     esvazia() {
         this._negociacoes.length = 0;
-        this._armadilha(this);
     }
 
     paraArray() {
