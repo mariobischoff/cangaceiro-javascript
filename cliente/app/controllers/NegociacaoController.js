@@ -20,7 +20,6 @@ class NegociacaoController {
             'texto'
         );
         this._service = new NegociacaoService();
-
     }
 
     adiciona(event) {
@@ -29,7 +28,6 @@ class NegociacaoController {
             this._negociacoes.adiciona(this._criaNegociacao());
             this._mensagem.texto = 'Negociação adicionada com sucesso';
             this._limpaFormulario();
-
         } catch (err) {
             if(err instanceof DataInvalidaException) {
                 this._mensagem.texto = err.message;
@@ -37,7 +35,6 @@ class NegociacaoController {
                 this._mensagem.texto = 'Um erro não esperado aconteceu. Entre em contato com o suporte'
             }
         }
-
     }
     
     apaga() {
@@ -46,14 +43,14 @@ class NegociacaoController {
     }
 
     importarNegociacoes() {
-        this._service.obterNegociacoesDaSemana((err, negociacoes) => {
-            if(err) {
-                this._mensagem.texto = err;
-                return;
-            }
-            negociacoes.forEach(negociacao => this._negociacoes.adiciona(negociacao));
-            this._mensagem.texto = 'Negociações importadas com sucesso';
-        });
+        this._service.obtemNegociacoesDoPeriodo().then(negociacoes => {
+            negociacoes.filter(novaNegociacao => {
+                !this._negociacoes.paraArray().some(
+                    negociacaoExistente => novaNegociacao.equals(negociacaoExistente))
+                }) // Filter 
+                .forEach(negociacao => this._negociacoes.adiciona(negociacao));
+            this._mensagem.texto = 'Negociações do período importadas com sucesso'
+        }).catch(err => this._mensagem.texto = err);
     }
 
     _limpaFormulario() {
@@ -64,7 +61,6 @@ class NegociacaoController {
     }
 
     _criaNegociacao() {
-        // retorna uma instancia de Negociação
         return new Negociacao(
             DateConverter.paraData(this._inputData.value),
             parseInt(this._inputQuantidade.value),

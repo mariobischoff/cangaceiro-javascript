@@ -1,2 +1,1 @@
 # cangaceiro-javascript
-# Praticando JavaScript
